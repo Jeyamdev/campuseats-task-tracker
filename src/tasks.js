@@ -12,13 +12,21 @@ console.log(`CampusEats has ${tasks.length} open tasks`);
 const VIP_DISCOUNT = 0.1;
 
 function calculateTotal(price, quantity, customerType) {
-  if (price < 0 || quantity < 0) {
-    throw new Error("price and quantity must be >= 0");
+  if (!Number.isFinite(price) || !Number.isFinite(quantity)) {
+    throw new TypeError("price and quantity must be valid numbers");
   }
+
+  if (price < 0 || quantity < 0) {
+    throw new RangeError("price and quantity must be >= 0");
+  }
+
   const subtotal = price * quantity;
   return customerType === "vip"
     ? subtotal * (1 - VIP_DISCOUNT)
     : subtotal;
 }
-// the API key comes from an environment variable,
-// e.g. process.env.API_KEY — never hard-coded
+
+// Secrets must be provided through environment variables,
+// e.g. process.env.API_KEY — never hard-coded.
+
+module.exports = { calculateTotal };
